@@ -17,7 +17,7 @@ export class CoursesService {
     return this.httpClient.get<Course[]>(this.API)
     .pipe(
       take(1), // As soon as you get the answer from pipe, you finish the subscription
-      delay(1000), // Just to show the spinner "<mat-spinner></mat-spinner>" used in courses.component.html
+      delay(300), // Just to show the spinner "<mat-spinner></mat-spinner>" used in courses.component.html
       tap(courses => console.log(courses))
     );;
   }

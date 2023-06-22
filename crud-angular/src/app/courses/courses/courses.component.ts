@@ -16,7 +16,6 @@ export class CoursesComponent implements OnInit {
 
   courses$: Observable <Course[]>;
   // courses: Course[] = [];
-  displayedColumns = ['name', 'category', 'actions'];
 
   // coursesService: CoursesService;
 
@@ -50,7 +49,6 @@ export class CoursesComponent implements OnInit {
   }
 
   onAdd() { // Used for the buttons showed in the courses.component.html
-    console.log('onAdd');
     this.router.navigate(['new'], {relativeTo: this.route});
   }
 
