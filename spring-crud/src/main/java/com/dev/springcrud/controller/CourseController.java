@@ -32,4 +32,15 @@ public class CourseController {
     public ResponseEntity<Course> create(@RequestBody Course course) {
         return ResponseEntity.status(HttpStatus.CREATED).body(courseRepository.save(course));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Course> update(@PathVariable Long id, @RequestBody Course course) {
+        return courseRepository.findById(id)
+                .map(record -> {
+                    record.setName(course.getName());
+                    record.setCategory(course.getCategory());
+                    Course updated = courseRepository.save(record);
+                    return ResponseEntity.ok().body(updated);
+                })
+                .orElse(ResponseEntity.notFound().build());    }
 }
