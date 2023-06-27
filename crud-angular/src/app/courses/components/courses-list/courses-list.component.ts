@@ -24,6 +24,6 @@ export class CoursesListComponent implements OnInit {
   }
 
   onEdit(course: Course) {
-    this.add.emit(course);
+    this.edit.emit(course);
   }
 }

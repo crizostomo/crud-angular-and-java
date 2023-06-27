@@ -2,34 +2,48 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NonNullableFormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 
+import { Course } from '../../model/course';
 import { CoursesService } from '../../services/courses.service';
 
 @Component({
   selector: 'app-course-form',
   templateUrl: './course-form.component.html',
-  styleUrls: ['./course-form.component.scss']
+  styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent implements OnInit {
-
   form = this.formBuilder.group({
+    _id: [''],
     name: [''],
-    category: ['']
+    category: [''],
   });
 
-  constructor(private formBuilder: NonNullableFormBuilder,
+  constructor(
+    private formBuilder: NonNullableFormBuilder,
     private service: CoursesService,
     private snackBar: MatSnackBar,
-    private location: Location) {
+    private location: Location,
+    private route: ActivatedRoute
+  ) {
     //this.form
   }
 
   ngOnInit(): void {
+    const course: Course = this.route.snapshot.data['course']; // 'course' comes from courses-routing.module.ts inside resolver
+    console.log(course);
+    this.form.setValue({ // setValue gets all the values, pathValue gets partial values
+      _id: course._id,
+      name: course.name,
+      category: course.category
+    });
   }
 
   onSubmit() {
-    this.service.save(this.form.value)
-      .subscribe(result => this.onSuccess(), error => this.onError);
+    this.service.save(this.form.value).subscribe(
+      (result) => this.onSuccess(),
+      (error) => this.onError
+    );
   }
 
   onCancel() {
@@ -37,12 +51,11 @@ export class CourseFormComponent implements OnInit {
   }
 
   private onSuccess() {
-    this.snackBar.open('Course was saved successfully', '', { duration: 2000});
+    this.snackBar.open('Course was saved successfully', '', { duration: 2000 });
     this.onCancel();
   }
 
   private onError() {
-    this.snackBar.open('Error when saving course', '', { duration: 2000});
+    this.snackBar.open('Error when saving course', '', { duration: 2000 });
   }
-
 }
