@@ -9,7 +9,7 @@ import { delay, take, tap } from 'rxjs';
 })
 export class CoursesService {
 
-  private readonly API = 'api/courses'; // Modify something in the string to exhibit the error Button | It was /assets/courses.json | The rest of the URL for courses is in proxy.cong.js
+  private readonly API = 'api/courses'; // Modify something in the string to exhibit the error Button | It was /assets/courses.json | The rest of the URL for courses is in proxy.conf.js
 
   constructor(private httpClient: HttpClient) { }
 
@@ -45,6 +45,13 @@ export class CoursesService {
 
   private update(record: Partial<Course>) {
     return this.httpClient.put<Course>(`${this.API}/${record._id}`, record)
+    .pipe(
+      take(1)
+      );
+  }
+
+  delete(id: string) {
+    return this.httpClient.delete(`${this.API}/${id}`)
     .pipe(
       take(1)
       );
