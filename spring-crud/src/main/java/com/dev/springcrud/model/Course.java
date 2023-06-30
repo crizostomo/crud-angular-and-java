@@ -3,9 +3,12 @@ package com.dev.springcrud.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -18,10 +21,15 @@ public class Course {
     private Long id;
 
     @NotBlank
-    @Column(length = 200, nullable = false)
+    @NotNull
+    @Length(min = 4, max = 100)
+    @Column(length = 100, nullable = false)
     private String name;
 
     @NotBlank
+    @NotNull
+    @Length(max = 10)
+    @Pattern(regexp = "Back-End|Front-End")
     @Column(length = 200, nullable = false)
     private String category;
 }
