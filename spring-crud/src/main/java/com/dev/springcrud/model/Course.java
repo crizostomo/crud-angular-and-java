@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -16,9 +17,11 @@ public class Course {
     @JsonProperty("_id")
     private Long id;
 
+    @NotBlank
     @Column(length = 200, nullable = false)
     private String name;
 
+    @NotBlank
     @Column(length = 200, nullable = false)
     private String category;
 }

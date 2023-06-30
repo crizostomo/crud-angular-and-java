@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder } from '@angular/forms';
+import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
@@ -15,8 +15,8 @@ import { CoursesService } from '../../services/courses.service';
 export class CourseFormComponent implements OnInit {
   form = this.formBuilder.group({
     _id: [''],
-    name: [''],
-    category: [''],
+    name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(100)]],
+    category: ['', [Validators.required]],
   });
 
   constructor(
@@ -57,5 +57,25 @@ export class CourseFormComponent implements OnInit {
 
   private onError() {
     this.snackBar.open('Error when saving course', '', { duration: 2000 });
+  }
+
+  getErrorMessage(fieldName: string) {
+    const field = this.form.get(fieldName);
+
+    if (field?.hasError('required')) { // '?' verifies if the field is null
+      return 'Field Required';
+    }
+
+    if (field?.hasError('minlength')) {
+      const requiredLength = field.errors ? field.errors['minlength']['requiredLength'] : 4;
+      return `Minimum lenght must be ${requiredLength} characters.`;
+    }
+
+    if (field?.hasError('maxlength')) {
+      const requiredLength = field.errors ? field.errors['maxlength']['requiredLength'] : 100;
+      return `Max lenght must be ${requiredLength} characters.`;
+    }
+
+    return 'Invalid Field';
   }
 }
