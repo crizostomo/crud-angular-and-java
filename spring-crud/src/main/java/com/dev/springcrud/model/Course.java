@@ -37,6 +37,11 @@ public class Course {
     @Column(length = 200, nullable = false)
     private String category;
 
+    /**
+     * TO-DO: ENUMS for category and Status
+     * Classes 43 and 44 have bugs
+     */
+
     @NotBlank
     @NotNull
     @Length(max = 10)
