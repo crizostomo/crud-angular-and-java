@@ -2,6 +2,7 @@ package com.dev.springcrud.service;
 
 import com.dev.springcrud.dto.CourseDTO;
 import com.dev.springcrud.dto.mapper.CourseMapper;
+import com.dev.springcrud.enums.Category;
 import com.dev.springcrud.exception.RecordNotFoundException;
 import com.dev.springcrud.repository.CourseRepository;
 import jakarta.validation.Valid;
@@ -59,10 +60,23 @@ public class CourseService {
         return courseRepository.findById(id)
                 .map(record -> {
                     record.setName(courseDTO.name());
-                    record.setCategory(courseDTO.category());
+
+                    Category category = getCategoryByValue(courseDTO.category());
+                    record.setCategory(category);
+
+//                    record.setCategory(Category.valueOf(courseDTO.category()));
                     return courseRepository.save(record);
                 }).map(courseMapper::toDTO)
                 .orElseThrow(() -> new RecordNotFoundException(id));
+    }
+
+    private Category getCategoryByValue(String categoryValue) {
+        for (Category category : Category.values()) {
+            if (category.getValue().equalsIgnoreCase(categoryValue)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Invalid category value: " + categoryValue);
     }
 
     public void delete(@PathVariable @NotNull @Positive Long id) {

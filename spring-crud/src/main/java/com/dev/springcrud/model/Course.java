@@ -1,5 +1,6 @@
 package com.dev.springcrud.model;
 
+import com.dev.springcrud.enums.Category;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,12 +31,13 @@ public class Course {
     @Column(length = 100, nullable = false)
     private String name;
 
-    @NotBlank
+//    @NotBlank
     @NotNull
-    @Length(max = 10)
-    @Pattern(regexp = "Back-End|Front-End")
+//    @Length(max = 10)
+//    @Pattern(regexp = "Back-End|Front-End")
     @Column(length = 200, nullable = false)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     /**
      * TO-DO: ENUMS for category and Status
