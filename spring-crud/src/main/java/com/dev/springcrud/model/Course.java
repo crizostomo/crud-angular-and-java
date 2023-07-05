@@ -2,16 +2,18 @@ package com.dev.springcrud.model;
 
 import com.dev.springcrud.enums.Category;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -44,10 +46,12 @@ public class Course {
      * Classes 43 and 44 have bugs
      */
 
-    @NotBlank
     @NotNull
     @Length(max = 10)
     @Pattern(regexp = "Active|Inactive")
     @Column(length = 10, nullable = false)
     private String status = "Active";
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
+    private List<Lesson> lessons = new ArrayList<>();
 }

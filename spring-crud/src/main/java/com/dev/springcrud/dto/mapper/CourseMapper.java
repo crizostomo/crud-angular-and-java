@@ -25,6 +25,7 @@ public class CourseMapper {
             course.setId(courseDTO.id());
         }
         course.setName(courseDTO.name());
+
         Category category = getCategoryByValue(courseDTO.category());
         course.setCategory(category);
 

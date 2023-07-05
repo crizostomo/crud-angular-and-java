@@ -2,6 +2,7 @@ package com.dev.springcrud;
 
 import com.dev.springcrud.enums.Category;
 import com.dev.springcrud.model.Course;
+import com.dev.springcrud.model.Lesson;
 import com.dev.springcrud.repository.CourseRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,6 +24,13 @@ public class SpringCrudApplication {
 			Course c = new Course();
 			c.setName("Angular with Spring");
 			c.setCategory(Category.FRONTEND);
+
+			Lesson l = new Lesson();
+			l.setName("Introduction");
+			l.setShareableYoutubeUrl("dFg4yHju81");
+			l.setCourse(c);
+			c.getLessons().add(l);
+
 			courseRepository.save(c);
 		};
 	}
