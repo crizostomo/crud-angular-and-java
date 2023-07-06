@@ -18,6 +18,34 @@
         </mat-select>
         <mat-error *ngIf="form.get('category')?.invalid">{{getErrorMessage("category")}}</mat-error>
       </mat-form-field>
+
+      <mat-toolbar>
+        <span>Lessons</span>
+        <button mat-icon-button color="accent">
+          <mat-icon aria-label="Add a new tab">add</mat-icon>
+        </button>
+      </mat-toolbar>
+
+      <table style="width: 100%" formArrayName="lessons"
+      *ngFor="let lesson of getLessonsFormArray(); let i = index"
+      >
+        <tr [formGroupName]="i">
+          <td style="width: 65%">
+            <mat-form-field class="full-width">
+              <mat-label>Lesson Name</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+          </td>
+          <td style="width: 30%">
+            <mat-form-field class="full-width">
+              <mat-label>URL</mat-label>
+              <span matPrefix>https://youtu.be/</span>
+              <input matInput formControlName="shareableYoutubeUrl" />
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+
     </form>
   </mat-card-content>
 
