@@ -35,7 +35,7 @@ export class CourseFormComponent implements OnInit {
       _id: [course._id],
       name: [course.name, [Validators.required, Validators.minLength(4), Validators.maxLength(100)]],
       category: [course.category, [Validators.required]],
-      lessons: this.formBuilder.array(this.retrieveLessons(course))
+      lessons: this.formBuilder.array(this.retrieveLessons(course), Validators.required)
     });
   }
 
@@ -52,8 +52,8 @@ export class CourseFormComponent implements OnInit {
   private createLesson(lesson: Lesson = {id: '', name: '', shareableYoutubeUrl: ''}) { // {} to initialize 'empty', if we input any data, it will ignore it
     return this.formBuilder.group({
       id: [lesson.id],
-      name: [lesson.name],
-      shareableYoutubeUrl: [lesson.shareableYoutubeUrl]
+      name: [lesson.name, [Validators.required, Validators.minLength(4), Validators.maxLength(100)]],
+      shareableYoutubeUrl: [lesson.shareableYoutubeUrl, [Validators.required, Validators.minLength(10), Validators.maxLength(11)]]
     });
   }
 
@@ -72,10 +72,14 @@ export class CourseFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.service.save(this.form.value).subscribe(
-      (result) => this.onSuccess(),
-      (error) => this.onError
-    );
+    if (this.form.valid) {
+      this.service.save(this.form.value).subscribe(
+        (result) => this.onSuccess(),
+        (error) => this.onError
+      );
+    } else {
+      alert ('form invalid');
+    }
   }
 
   onCancel() {
@@ -109,5 +113,10 @@ export class CourseFormComponent implements OnInit {
     }
 
     return 'Invalid Field';
+  }
+
+  isFormArrayRequired() {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    return !lessons.valid && lessons.hasError('required') && lessons.touched;
   }
 }
