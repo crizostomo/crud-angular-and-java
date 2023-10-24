@@ -78,7 +78,7 @@ export class CourseFormComponent implements OnInit {
         (error) => this.onError
       );
     } else {
-      alert ('form invalid');
+      alert ('Invalid form');
     }
   }
 
