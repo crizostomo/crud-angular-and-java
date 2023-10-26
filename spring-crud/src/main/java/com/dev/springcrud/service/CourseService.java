@@ -4,6 +4,7 @@ import com.dev.springcrud.dto.CourseDTO;
 import com.dev.springcrud.dto.mapper.CourseMapper;
 import com.dev.springcrud.enums.Category;
 import com.dev.springcrud.exception.RecordNotFoundException;
+import com.dev.springcrud.model.Course;
 import com.dev.springcrud.repository.CourseRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -59,10 +60,16 @@ public class CourseService {
     public CourseDTO update(@NotNull @Positive Long id, @Valid @NotNull CourseDTO courseDTO) {
         return courseRepository.findById(id)
                 .map(record -> {
+                    Course course = courseMapper.toEntity((courseDTO));
+
                     record.setName(courseDTO.name());
 
                     Category category = getCategoryByValue(courseDTO.category());
                     record.setCategory(category);
+
+                    //record.setLessons(course.getLessons());
+                    record.getLessons().clear(); // Remove all - To avoid the cascade error
+                    course.getLessons().forEach(record.getLessons()::add); // Add all
 
 //                    record.setCategory(Category.valueOf(courseDTO.category()));
                     return courseRepository.save(record);

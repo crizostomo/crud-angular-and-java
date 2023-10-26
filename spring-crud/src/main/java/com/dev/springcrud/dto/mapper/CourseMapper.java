@@ -4,6 +4,7 @@ import com.dev.springcrud.dto.CourseDTO;
 import com.dev.springcrud.dto.LessonDTO;
 import com.dev.springcrud.enums.Category;
 import com.dev.springcrud.model.Course;
+import com.dev.springcrud.model.Lesson;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -38,7 +39,20 @@ public class CourseMapper {
         Category category = getCategoryByValue(courseDTO.category());
         course.setCategory(category);
 
+        // TO-DO: Defining this hard-coded string similar to what we have done with category
         course.setStatus("Active");
+
+        List<Lesson> lessons = courseDTO.lessons().stream().map(lessonDTO -> {
+            var lesson = new Lesson();
+            lesson.setId(lessonDTO.id());
+            lesson.setName(lessonDTO.name());
+            lesson.setShareableYoutubeUrl(lessonDTO.shareableYoutubeUrl());
+            lesson.setCourse(course);
+            return lesson;
+        }).collect(Collectors.toList());
+
+        course.setLessons(lessons);
+
         return course;
     }
 
