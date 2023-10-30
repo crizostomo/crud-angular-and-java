@@ -1,15 +1,17 @@
 package com.dev.springcrud.service;
 
 import com.dev.springcrud.dto.CourseDTO;
+import com.dev.springcrud.dto.CoursePageDTO;
 import com.dev.springcrud.dto.mapper.CourseMapper;
 import com.dev.springcrud.enums.Category;
 import com.dev.springcrud.exception.RecordNotFoundException;
 import com.dev.springcrud.model.Course;
 import com.dev.springcrud.repository.CourseRepository;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +47,18 @@ public class CourseService {
 //            dtos.add(dto);
 //        }
 //        return dtos;
+    }
+
+    public CoursePageDTO findAll(@PositiveOrZero int page, @Positive @Max(1000) int pageSize) {
+        Page<Course> coursePage = courseRepository.findAll(PageRequest.of(page, pageSize));
+        List<CourseDTO> list = coursePage.getContent().stream()
+                .map(courseMapper::toDTO)
+                .toList();
+        return new CoursePageDTO(list, coursePage.getTotalElements(), coursePage.getTotalPages());
+    }
+
+    public List<CourseDTO> findByName(@NotNull @NotBlank String name) {
+        return courseRepository.findByName(name).stream().map(courseMapper::toDTO).toList();
     }
 
     public CourseDTO findById(@NotNull @Positive Long id) {
