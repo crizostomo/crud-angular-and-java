@@ -30,7 +30,7 @@ public class Lesson {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Course course;
 }
