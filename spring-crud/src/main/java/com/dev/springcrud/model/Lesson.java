@@ -26,11 +26,12 @@ public class Lesson {
     @NotNull
     @Length(min = 10, max = 11)
     @Column(length = 11, nullable = false)
-    private String shareableYoutubeUrl;
+    @JsonProperty("shareableYoutubeUrl")
+    private String shareableyoutubeurl;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Course course;
 }
